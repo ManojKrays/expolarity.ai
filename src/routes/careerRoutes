@@ -1,0 +1,68 @@
+const express = require("express");
+const { getCareerSuggestions } = require("../controllers/aiService");
+const CareerSuggestion = require("../models/CareerSuggestion");
+const router = express.Router();
+
+router.post("/generate", async (req, res) => {
+  try {
+    const { student_id, country, grade, assessment_result } = req.body;
+    console.log(req.body);
+    if (!student_id || !country || !grade || !assessment_result) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
+    }
+
+    console.log("Assessment Result:", assessment_result);
+
+    // Get AI-generated career options
+    const careerOptions = await getCareerSuggestions(
+      assessment_result,
+      country,
+      grade
+    );
+
+    // Save to MongoDB
+    const newCareerSuggestion = new CareerSuggestion({
+      student_id,
+      country,
+      grade,
+      assessment_result,
+      career_options: careerOptions,
+    });
+
+    await newCareerSuggestion.save();
+
+    res.json({ success: true, data: careerOptions });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error generating career suggestions" });
+  }
+});
+
+router.get("/:student_id", async (req, res) => {
+  try {
+    const { student_id } = req.params;
+    // const query = "SELECT * FROM career_suggestions WHERE student_id = $1";
+    // const result = await pool.query(query, [student_id]);
+
+    const result = await CareerSuggestion.find({ student_id });
+
+    // if (result.rows.length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, message: "No career suggestions found" });
+    // }
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error retrieving career suggestions" });
+  }
+});
+
+module.exports = router;
