@@ -22,18 +22,18 @@ router.post("/generate", async (req, res) => {
       grade
     );
 
-    // Save to MongoDB
-    const newCareerSuggestion = new CareerSuggestion({
-      student_id,
-      country,
-      grade,
-      assessment_result,
-      career_options: careerOptions,
-    });
-
-    await newCareerSuggestion.save();
-
     res.json({ success: true, data: careerOptions });
+
+    // Save to MongoDB
+    // const newCareerSuggestion = new CareerSuggestion({
+    //   student_id,
+    //   country,
+    //   grade,
+    //   assessment_result,
+    //   career_options: careerOptions,
+    // });
+
+    // await newCareerSuggestion.save();
   } catch (error) {
     console.error(error);
     res

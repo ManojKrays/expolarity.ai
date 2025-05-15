@@ -4,7 +4,7 @@ require("dotenv").config();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function getCareerSuggestions(assessmentResult, country, grade) {
-    const prompt = `You are an expert career advisor. Your task is to provide a detailed career path for a student based on their selected career option, current grade, and country of study.
+  const prompt = `You are an expert career advisor. Your task is to provide a detailed career path for a student based on their selected career option, current grade, and country of study.
 
 ### Input Details:
 - Career Option: ${assessmentResult}  
@@ -46,14 +46,14 @@ async function getCareerSuggestions(assessmentResult, country, grade) {
 - Provide the response in a structured format with bullet points.  
 - Ensure the career path is **realistic, detailed, and achievable** for students in ${country}.  
 - Avoid generic advice; focus on **data-driven insights**.  `;
-    
-    const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 200
-    });
 
-    return response.choices[0].message.content.trim();
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
+    max_tokens: 200,
+  });
+
+  return response.choices[0].message.content.trim();
 }
 
 module.exports = { getCareerSuggestions };
