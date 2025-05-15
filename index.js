@@ -10,6 +10,7 @@ const allowedOrigins = [
   "http://panel.expolarity.ai",
   "https://panel.expolarity.ai",
   "http://localhost:5173",
+  "https://zurtle-school-app.onrender.com",
 ];
 
 // CORS Configuration
